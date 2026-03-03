@@ -57,6 +57,10 @@ inputs:
     required: false
     description: "Set to true if you trying to update private GitHub repository."
     default: "false"
+  excludePaths:
+    required: false
+    description: "List of paths to exclude from the update. Comma separated."
+    default: ""
 
 runs:
   using: "composite"
@@ -76,6 +80,7 @@ runs:
         $useTokenForClone = "${{ inputs.useTokenForClone }}"
         $stablePackages = "${{ inputs.stablePackages }}"
         $previewPackages = "${{ inputs.previewPackages }}"
+        $excludePaths = "${{ inputs.excludePaths }}"
 
         # output all parameters for debug
         # Write-Host "workingDirectory: $workingDirectory"
@@ -90,6 +95,7 @@ runs:
         # Write-Host "repoOwner: $repoOwner"
         # Write-Host "branchToPr: $branchToPr"
         # Write-Host "nugetConfig: $nugetConfig"
+        # Write-Host "excludePaths: $excludePaths"
         
         # skip first experience prompt
         $env:DOTNET_NOLOGO = 'true';
@@ -152,6 +158,11 @@ runs:
 
         if ($useTokenForClone -eq "true") {
             $nanoduArgs += "--use-token-for-clone"
+        }
+
+        if (-not [string]::IsNullOrEmpty($excludePaths)) {
+            $nanoduArgs += "--exclude-paths"
+            $nanoduArgs += $excludePaths
         }
 
         if (-not [string]::IsNullOrEmpty($solutionsToCheck)) {

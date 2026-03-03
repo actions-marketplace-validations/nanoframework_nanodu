@@ -18,6 +18,7 @@ This action installs the nanodu .NET tool and udpates the NuGet packages and res
 |`solutionsToCheck` |All                                |_optional_ string path(s)      |List of Solution(s) to update in the current `workingDirectory`.|
 |`reposToUpdate`    |None                               |_optional_ repository names    |List of (dependent upstream) repository(es) to update. [internal use only].|
 |`exclusionList`    |None                               |_optional_ solution list       |List of solution(s) to exclude from update. Comma separated list.|
+|`excludePaths`     |None                               |_optional_ path list           |List of paths to exclude from the update. Comma separated.|
 |`gitHubUser`       |                                   |                               |GitHub user for creating PR.|
 |`gitHubEmail`      |                                   |                               |GitHub user email for creating PR.|
 |`gitHubAuth`       |                                   |                               |GitHub Personal Access Token for creating PR.|
@@ -75,6 +76,17 @@ Update dependencies on all solutions, except `MyLibrary` and `MyOtherLibrary`, u
     previewPackages: true
     solutionsToCheck: 'amqp-nanoFramework.sln'
     exclusionList: 'MyLibrary,MyOtherLibrary'
+```
+
+Update dependencies while excluding specific paths from processing.
+
+```yaml
+- uses: nanoframework/nanodu@v1
+  env:
+    GITHUB_TOKEN: ${{ github.token }}
+  with:
+    stablePackages: true
+    excludePaths: 'test/,samples/'
 ```
 
 ## Authentication
